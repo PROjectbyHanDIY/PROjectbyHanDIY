@@ -1,0 +1,37 @@
+@import url('@tldraw/tldraw/tldraw.css');
+
+
+.tl-theme__light {
+    --color-background:  #fff2ae;
+} 
+
+.custom-layout {
+	position: absolute;
+	inset: 0px;
+	z-index: 300;
+	pointer-events: none;
+}
+
+.custom-toolbar {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 200;
+	display: flex;
+	padding: 8px;
+	gap: 8px;
+    background-color: white;
+}
+
+.custom-button {
+	pointer-events: all;
+	padding: 4px 12px;
+	background: white;
+	border: 1px solid black;
+	border-radius: 64px;
+}
+
+.custom-button[data-isactive='true'] {
+	background-color: black;
+	color: white;
+}

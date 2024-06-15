@@ -1,0 +1,71 @@
+{
+  "shapes": [
+    {
+      "x": 672.2223205566406,
+      "y": 152.51732635498047,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "updatedBy": "jP0QlSDyp0pCMxLauJcf_",
+        "updatedAt": 1712935421554,
+        "label": "note"
+      },
+      "type": "note",
+      "parentId": "page:page",
+      "index": "a4",
+      "props": {
+        "color": "light-violet",
+        "size": "m",
+        "text": "Note for later",
+        "font": "draw",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "growY": 0,
+        "url": "https://www.google.ca"
+      },
+      "id": "shape:hyBejxfvEF4S-huEHU7Jk",
+      "typeName": "shape"
+    }
+  ],
+  "rootShapeIds": ["shape:hyBejxfvEF4S-huEHU7Jk"],
+  "schema": {
+    "schemaVersion": 1,
+    "storeVersion": 4,
+    "recordVersions": {
+      "asset": {
+        "version": 1,
+        "subTypeKey": "type",
+        "subTypeVersions": { "image": 3, "video": 3, "bookmark": 1 }
+      },
+      "camera": { "version": 1 },
+      "document": { "version": 2 },
+      "instance": { "version": 24 },
+      "instance_page_state": { "version": 5 },
+      "page": { "version": 1 },
+      "shape": {
+        "version": 3,
+        "subTypeKey": "type",
+        "subTypeVersions": {
+          "group": 0,
+          "text": 1,
+          "bookmark": 2,
+          "draw": 1,
+          "geo": 8,
+          "note": 5,
+          "line": 4,
+          "frame": 0,
+          "arrow": 3,
+          "highlight": 0,
+          "embed": 4,
+          "image": 3,
+          "video": 2,
+          "card": 1
+        }
+      },
+      "instance_presence": { "version": 5 },
+      "pointer": { "version": 1 }
+    }
+  },
+  "assets": []
+}
