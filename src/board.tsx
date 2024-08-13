@@ -20,20 +20,6 @@ export const Board = (props: any) => {
 
   return (
     <>
-      {/* <Box
-        className="container"
-        sx={{
-          background: "beige",
-          height: "500px",
-          width: 1,
-        }}
-        ref={boundRef}
-      >
-        <BoxElement
-          boundRef={props.upperBoundHeight}
-          parRef={props.navRef}
-        ></BoxElement>
-      </Box> */}
       <div
         style={{
           position: "fixed",

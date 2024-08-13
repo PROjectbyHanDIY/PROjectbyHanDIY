@@ -2,20 +2,30 @@ import {
 	HTMLContainer,
 	Rectangle2d,
 	ShapeUtil,
+	TLOnBeforeCreateHandler,
+	TLOnClickHandler,
 	TLOnResizeHandler,
 	TLShape,
 	getDefaultColorTheme,
 	resizeBox,
 } from '@tldraw/tldraw'
-import { useState } from 'react'
+import * as React from "react"
 import { cardShapeMigrations } from './cardShapeMigrations'
 import { cardShapeProps } from './cardShapeProps'
 import { ICardShape } from './cardShapeTypes'
 import { TextField } from '@mui/material'
+import { CardData } from './cardData'
 
 // There's a guide at the bottom of this file!
 
+
 export class CardShapeUtil extends ShapeUtil<ICardShape> {
+	state : CardData = {
+		url: '',
+		title:  '',
+		notes: ''
+	}
+	
 	static override type = 'card' as const
 	// [1]
 	static override props = cardShapeProps
@@ -44,31 +54,70 @@ export class CardShapeUtil extends ShapeUtil<ICardShape> {
 		})
 	}
 
+	setState(data : CardData ){
+		this.state = data;
+	}
+
+	onComponentLoad(shape: ICardShape){
+		this.setState(shape.meta.data as unknown as CardData);
+	}
+
 	// [6]
 	component(shape: ICardShape) {
-    
+		this.onComponentLoad(shape);
+		
 		const bounds = this.editor.getShapeGeometry(shape).bounds
 		const theme = getDefaultColorTheme({ isDarkMode: this.editor.user.getIsDarkMode() })
-		type ShapeWithMyMeta = TLShape & { meta: { label: string, updatedBy: string, updatedAt: string, url: string, notes: string } }
+		type ShapeWithMyMeta = TLShape & {
+			 meta: { 
+				label: string,
+				updatedBy: string,
+				updatedAt: string,
+				data: CardData |any 
+			} 
+		}
 
 		const onlySelectedShape = this.editor.getOnlySelectedShape() as ShapeWithMyMeta | null
 		const editorContext = this.editor;
 
-		function update(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+		function update(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, state : CardData | any) {
 			if (onlySelectedShape) {
 				const { id, type, meta } = onlySelectedShape
-	
 				editorContext.updateShapes([
-					{ id, type, meta: { ...meta, url: e.currentTarget.value } },
+					{ 
+						id, 
+						type,
+						meta: { 
+							...meta, 
+							lastInput: e.currentTarget.value,
+							data: state
+							} 
+						},
 				])
 			}
 		}
+		// function updateUrl(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, url: string) {
+		// 	if (onlySelectedShape) {
+		// 		const { id, type, meta } = onlySelectedShape
+		// 		editorContext.updateShapes([
+		// 			{ 
+		// 				id, 
+		// 				type,
+		// 				props: {
+		// 					...CardShapeUtil.props,
+		// 					url: url
+		// 				}
+		// 			}
+		// 		])
+		// 	}
+		// }
 
 		//[a]
 		// eslint-disable-next-line react-hooks/rules-of-hooks
-		const [url, setUrl] = useState(shape.meta.url? shape.meta.url : "")
-		console.log(shape.meta)
+		//const [url, setUrl] = this.setState(shape.meta.url? shape.meta.url : "");
+		//console.log(shape.meta)
 		return (
+			
 			<>
 			<HTMLContainer
 				id={shape.id}
@@ -84,15 +133,45 @@ export class CardShapeUtil extends ShapeUtil<ICardShape> {
 					boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'
 				}}
 			>
-				<div>
-					<h1 style={{marginBottom:'10px'}}>Link</h1>
 
-				</div>
-				<TextField variant="outlined" label="URL" value={url} onChange={(event)=>{
-					console.log(event.target.value)
-					setUrl(event.target.value)
-					update(event);
-					} }>
+				<TextField 
+					variant="standard" 
+					label="Title" 
+					value={this.state?.title}
+					sx={{mb: 5, width: '85%'}}
+						onChange={(event)=>{
+							this.setState({...this.state, title: event.target.value})
+							update(event, this.state);
+						}}>
+				</TextField>
+
+				{/* <div>
+					<h1 style={{marginBottom:'10px'}}> {this.state.title} </h1>
+				</div> */}
+				<TextField 
+					label="Notes"
+					value={this.state?.notes}
+					multiline
+					maxRows={4}
+					sx={{mb: 5, width: '85%'}}
+					onChange={(event)=>{
+						this.setState({...this.state, notes: event.target.value})
+						update(event, this.state);
+					}}
+				/>
+
+				<TextField 
+					variant="outlined" 
+					value={this.state?.url}
+					label="URL" 
+					sx={{mb: 5, width: '85%'}}
+						onChange={(event)=>{
+							console.log(this.state)
+							//console.log(event.target.value)
+							//setUrl(event.target.value)
+							this.setState({...this.state, url: event.target.value})
+							update(event, this.state);
+						} }>
 				</TextField>
         
 				
@@ -110,6 +189,15 @@ export class CardShapeUtil extends ShapeUtil<ICardShape> {
 	override onResize: TLOnResizeHandler<ICardShape> = (shape, info) => {
 		return resizeBox(shape, info)
 	}
+
+	onBeforeCreate?: TLOnBeforeCreateHandler<ICardShape> = (next) =>{
+		console.log("BEFORE CREATE", next)
+	}
+
+	onClick?: TLOnClickHandler<ICardShape> = (shape)=>{
+
+	}
+
 }
 /* 
 A utility class for the card shape. This is where you define the shape's behavior, 
