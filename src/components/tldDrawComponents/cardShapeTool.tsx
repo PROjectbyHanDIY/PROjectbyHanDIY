@@ -1,10 +1,30 @@
-import { BaseBoxShapeTool, TLClickEvent } from '@tldraw/tldraw'
-export class CardShapeTool extends BaseBoxShapeTool {
-	static override id = 'card'
-	static override initial = 'idle'
-	override shapeType = 'card'
+import { BaseBoxShapeTool, StateNode, TLClickEventInfo } from '@tldraw/tldraw'
 
-	override onDoubleClick: TLClickEvent = (_info) => {
+const OFFSET = 0
+
+export class CardShapeTool extends BaseBoxShapeTool   {
+	static override id = 'card';	
+	static override initial = 'idle';
+	override shapeType = 'card'
+	static override isLockable: boolean = true;
+
+	// [a]
+	override onEnter() {
+		this.editor.setCursor({ type: 'cross', rotation: 0 })
+	}
+
+	// [b]
+	// override onPointerDown() {
+	// 	const { currentPagePoint } = this.editor.inputs
+	// 	this.editor.createShape({
+	// 		type: 'card',
+	// 		x: currentPagePoint.x - OFFSET,
+	// 		y: currentPagePoint.y - OFFSET,
+	// 		//props: { text: '❤️' },
+	// 	})
+	// }
+
+	override onDoubleClick(_info: TLClickEventInfo) {
 		// you can handle events in handlers like this one;
 		// check the BaseBoxShapeTool source as an example
 	}

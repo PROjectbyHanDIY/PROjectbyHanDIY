@@ -1,10 +1,12 @@
 import {
 	DefaultKeyboardShortcutsDialog,
 	DefaultKeyboardShortcutsDialogContent,
+	DefaultToolbar,
+	DefaultToolbarContent,
 	TLComponents,
 	TLUiOverrides,
 	TldrawUiMenuItem,
-	toolbarItem,
+	useIsToolSelected,
 	useTools,
 } from '@tldraw/tldraw'
 
@@ -24,28 +26,31 @@ export const uiOverrides: TLUiOverrides = {
 		}
 		return tools
 	},
-	toolbar(_app, toolbar, { tools }) {
-		// Add the tool item from the context to the toolbar.
-		toolbar.splice(4, 0, toolbarItem(tools.card))
-		return toolbar
-	},
 }
 
 export const components: TLComponents = {
+	Toolbar: (props) => {
+		const tools = useTools()
+		const isCardSelected = useIsToolSelected(tools['card'])
+		return (
+			<DefaultToolbar {...props}>
+				<TldrawUiMenuItem {...tools['card']} isSelected={isCardSelected} />
+				<DefaultToolbarContent />
+			</DefaultToolbar>
+		)
+	},
 	KeyboardShortcutsDialog: (props) => {
 		const tools = useTools()
 		return (
 			<DefaultKeyboardShortcutsDialog {...props}>
-				<DefaultKeyboardShortcutsDialogContent />
-				{/* Ideally, we'd interleave this into the tools group */}
 				<TldrawUiMenuItem {...tools['card']} />
+				<DefaultKeyboardShortcutsDialogContent />
 			</DefaultKeyboardShortcutsDialog>
 		)
 	},
 }
 
-/* 
-
+/*
 This file contains overrides for the Tldraw UI. These overrides are used to add your custom tools
 to the toolbar and the keyboard shortcuts menu.
 

@@ -5,6 +5,7 @@ export type ICardShape = TLBaseShape<
 	'card',
 	{
 		w: number,
-		h: number
+		h: number,
+		url: string
 	}
 >

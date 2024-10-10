@@ -2,10 +2,12 @@ import {
 	HTMLContainer,
 	Rectangle2d,
 	ShapeUtil,
-	TLOnBeforeCreateHandler,
-	TLOnClickHandler,
-	TLOnResizeHandler,
+	TLBaseBoxShape,
+	//TLOnBeforeCreateHandler,
+	//TLOnClickHandler,
+	//TLOnResizeHandler,
 	TLShape,
+	//TLShapeUtilFlag,
 	getDefaultColorTheme,
 	resizeBox,
 } from '@tldraw/tldraw'
@@ -13,9 +15,9 @@ import * as React from "react"
 import { cardShapeMigrations } from './cardShapeMigrations'
 import { cardShapeProps } from './cardShapeProps'
 import { ICardShape } from './cardShapeTypes'
-import { TextField } from '@mui/material'
+import { TextField, Box, Button, Link,  } from '@mui/material'
 import { CardData } from './cardData'
-
+import DeleteIcon from '@mui/icons-material/Delete';
 // There's a guide at the bottom of this file!
 
 
@@ -34,14 +36,16 @@ export class CardShapeUtil extends ShapeUtil<ICardShape> {
 
 	// [3]
 	override isAspectRatioLocked = (_shape: ICardShape) => false
-	override canResize = (_shape: ICardShape) => true
-	override canBind = (_shape: ICardShape) => true
+	override canResize = (_shape: ICardShape) => false
+	//override canBind = (_shape: ICardShape) => true
+	override hideRotateHandle = (_shape: ICardShape) => true
 
 	// [4]
 	getDefaultProps(): ICardShape['props'] {
 		return {
-			w: 300,
-			h: 300
+			w: 500,
+			h: 500,
+			url: ''
 		}
 	}
 
@@ -65,9 +69,9 @@ export class CardShapeUtil extends ShapeUtil<ICardShape> {
 	// [6]
 	component(shape: ICardShape) {
 		this.onComponentLoad(shape);
-		
-		const bounds = this.editor.getShapeGeometry(shape).bounds
-		const theme = getDefaultColorTheme({ isDarkMode: this.editor.user.getIsDarkMode() })
+		//console.log(shape)
+		//const bounds = this.editor.getShapeGeometry(shape).bounds
+		//const theme = getDefaultColorTheme({ isDarkMode: this.editor.user.getIsDarkMode() })
 		type ShapeWithMyMeta = TLShape & {
 			 meta: { 
 				label: string,
@@ -96,21 +100,21 @@ export class CardShapeUtil extends ShapeUtil<ICardShape> {
 				])
 			}
 		}
-		// function updateUrl(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, url: string) {
-		// 	if (onlySelectedShape) {
-		// 		const { id, type, meta } = onlySelectedShape
-		// 		editorContext.updateShapes([
-		// 			{ 
-		// 				id, 
-		// 				type,
-		// 				props: {
-		// 					...CardShapeUtil.props,
-		// 					url: url
-		// 				}
-		// 			}
-		// 		])
-		// 	}
-		// }
+		function updateUrl(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+			if (onlySelectedShape) {
+				const { id, type, meta } = onlySelectedShape
+				editorContext.updateShapes([
+					{ 
+						id, 
+						type,
+						props: {
+							...shape.props,
+							url: e.target.value
+						}
+					}
+				])
+			}
+		}
 
 		//[a]
 		// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -118,10 +122,11 @@ export class CardShapeUtil extends ShapeUtil<ICardShape> {
 		//console.log(shape.meta)
 		return (
 			
-			<>
 			<HTMLContainer
 				id={shape.id}
 				style={{
+					height: '500px',
+					width: '500px',
 					background: 'white',
 					borderRadius: 25,
 					border: '1px  black',
@@ -133,27 +138,23 @@ export class CardShapeUtil extends ShapeUtil<ICardShape> {
 					boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'
 				}}
 			>
-
+				
 				<TextField 
 					variant="standard" 
 					label="Title" 
 					value={this.state?.title}
-					sx={{mb: 5, width: '85%'}}
+					sx={{mb: 5, mt: 5, width: '80%'}}
 						onChange={(event)=>{
 							this.setState({...this.state, title: event.target.value})
 							update(event, this.state);
 						}}>
 				</TextField>
-
-				{/* <div>
-					<h1 style={{marginBottom:'10px'}}> {this.state.title} </h1>
-				</div> */}
 				<TextField 
 					label="Notes"
 					value={this.state?.notes}
 					multiline
 					maxRows={4}
-					sx={{mb: 5, width: '85%'}}
+					sx={{mb: 5, width: '80%'}}
 					onChange={(event)=>{
 						this.setState({...this.state, notes: event.target.value})
 						update(event, this.state);
@@ -164,39 +165,77 @@ export class CardShapeUtil extends ShapeUtil<ICardShape> {
 					variant="outlined" 
 					value={this.state?.url}
 					label="URL" 
-					sx={{mb: 5, width: '85%'}}
-						onChange={(event)=>{
-							console.log(this.state)
-							//console.log(event.target.value)
-							//setUrl(event.target.value)
-							this.setState({...this.state, url: event.target.value})
-							update(event, this.state);
-						} }>
-				</TextField>
+					sx={{mb: 5, width: '80%'}}
+					onChange={(event)=>{
+						console.log(this.state)
+						//console.log(event.target.value)
+						//setUrl(event.target.value)
+						this.setState({...this.state, url: event.target.value})
+						//update(event, this.state);
+						updateUrl(event)
+					} }
+				/>
+				<DeleteIcon>
+				<a 
+					href="https://www.google.ca"
+					target='_blank'
+					rel="noreferrer"
+					id='link'
+					onPointerDown={(e: { stopPropagation: () => any }) => e.stopPropagation()}
+					onTouchStart={(e: { stopPropagation: () => any }) => e.stopPropagation()}
+					onTouchEnd={(e: { stopPropagation: () => any }) => e.stopPropagation()}
+				>
+					https://www.google.ca
+				</a>
+				</DeleteIcon>
+				<Button 
+					component={Link} 
+					variant='outlined' 
+					sx={{borderRadius: 25, marginTop: 2}}
+					
+					rel="noopener noreferrer"
+					target="_blank"
+					onClick={() =>{
+						console.log("clicked")
+						window.open(shape.props.url, '_blank', 'noopener,noreferrer');
+					}}
+					// [b] This is where we stop event propagation
+					onPointerDown={(e: { stopPropagation: () => any }) => e.stopPropagation()}
+					onTouchStart={(e: { stopPropagation: () => any }) => e.stopPropagation()}
+					onTouchEnd={(e: { stopPropagation: () => any }) => e.stopPropagation()}
+				>					
+					{shape.props.url}
+				</Button>
+
+				{/* <a 
+					href='https://www.google.ca'
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					https://www.google.ca
+				</a> */}
         
-				
-        
-			</HTMLContainer>
-			</>)
+			</HTMLContainer>)
 	}
 
 	// [7]
 	indicator(shape: ICardShape) {
+		console.log(shape.props)
 		return <rect width={shape.props.w} height={shape.props.h} />
 	}
 
 	// [8]
-	override onResize: TLOnResizeHandler<ICardShape> = (shape, info) => {
-		return resizeBox(shape, info)
-	}
+	// override onResize: TLOnResizeHandler<ICardShape> = (shape: TLBaseBoxShape, info: any) => {
+	// 	return resizeBox(shape, info)
+	// }
 
-	onBeforeCreate?: TLOnBeforeCreateHandler<ICardShape> = (next) =>{
-		console.log("BEFORE CREATE", next)
-	}
+	// onBeforeCreate?: TLOnBeforeCreateHandler<ICardShape> = (next: any) =>{
+	// 	console.log("BEFORE CREATE", next)
+	// }
 
-	onClick?: TLOnClickHandler<ICardShape> = (shape)=>{
+	// onClick?: TLOnClickHandler<ICardShape> = (shape: TLBaseBoxShape)=>{
 
-	}
+	// }
 
 }
 /* 
