@@ -8,8 +8,9 @@ import "./components/tldDrawComponents/custom-ui.css"
 //import { CustomUi } from "./tldDrawComponents/customUi";
 //import {CustomUi} from "./components/tldDrawComponents/customUi"
 import { components, uiOverrides } from "./components/tldDrawComponents/ui-overrides";
-import { CardShapeUtil } from "./components/tldDrawComponents/cardShapeUtil";
-import { CardShapeTool } from "./components/tldDrawComponents/cardShapeTool";
+import { CardShapeUtil } from "./components/tldDrawComponents/card/cardShapeUtil";
+import { CardShapeTool } from "./components/tldDrawComponents/card/cardShapeTool";
+import { CustomUi } from "./components/tldDrawComponents/projectMenu/menu";
 
 
 export const Board = (props: any) => {
@@ -34,15 +35,15 @@ export const Board = (props: any) => {
             persistenceKey="tldraw__editor" 
             // Pass in the array of custom shape classes
             shapeUtils={customShapeUtils}
-            // Pass in the array of custom tool classes
+            // Pass in the array of custom tool classes 
             tools={customTools}
             // Pass in any overrides to the user interface
             overrides={uiOverrides}
             // Pass in the new Keybaord Shortcuts component
             components={components}
+            //add additional starting properties to any shape 
             onMount={(editor) => {
               editor.getInitialMetaForShape = (shape) => {
-                console.log(shape)
                 return {
                   updatedBy: editor.user.getId(),
                   updatedAt: Date.now(),
@@ -65,6 +66,7 @@ export const Board = (props: any) => {
                     
           >
             <MetaUiHelper />
+            <CustomUi />
             </Tldraw>
       </div>
     </>

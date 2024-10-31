@@ -10,10 +10,47 @@ import {
 	useTools,
 } from '@tldraw/tldraw'
 
+import {
+  DefaultActionsMenu,
+  DefaultActionsMenuContent,
+//   DefaultColorStyle,
+   DefaultContextMenu,
+   DefaultContextMenuContent,
+//   DefaultDebugMenu,
+//   DefaultDebugMenuContent,
+//   DefaultHelpMenu,
+//   DefaultHelpMenuContent,
+//   DefaultKeyboardShortcutsDialog,
+//   DefaultKeyboardShortcutsDialogContent,
+//   DefaultMainMenu,
+//   DefaultMainMenuContent,
+//   DefaultPageMenu,
+//   DefaultQuickActions,
+//   DefaultQuickActionsContent,
+//   DefaultStylePanel,
+//   DefaultStylePanelContent,
+//   DefaultToolbar,
+//   DefaultToolbarContent,
+//   DefaultZoomMenu,
+//   DefaultZoomMenuContent,
+//   TLComponents,
+//   Tldraw,
+//   TldrawUiButton,
+//   TldrawUiButtonLabel,
+   TldrawUiMenuGroup,
+//   TldrawUiMenuItem,
+//   TLUiContextMenuProps,
+//   TLUiKeyboardShortcutsDialogProps,
+//   TLUiStylePanelProps,
+//   useEditor,
+//   useIsToolSelected,
+//   useRelevantStyles,
+//   useTools,
+} from "tldraw";
 // There's a guide at the bottom of this file!
 
 export const uiOverrides: TLUiOverrides = {
-	tools(editor, tools) {
+	tools(editor, tools, helpers) {
 		// Create a tool item in the ui's context.
 		tools.card = {
 			id: 'card',
@@ -47,7 +84,8 @@ export const components: TLComponents = {
 				<DefaultKeyboardShortcutsDialogContent />
 			</DefaultKeyboardShortcutsDialog>
 		)
-	},
+	}
+	
 }
 
 /*

@@ -1,26 +1,39 @@
 @import url('@tldraw/tldraw/tldraw.css');
 
 
-.tl-theme__light {
+.tl-background {
     --color-background:  #fff2ae;
 } 
 
-.custom-layout {
+.menu {
+	pointer-events: 'all';
+	position: absolute;
+	display: flex;
+	width: auto;
+}
+
+/* .custom-layout {
 	position: absolute;
 	inset: 0px;
 	z-index: 300;
-	pointer-events: none;
+} */
+
+.custom-menu-container {
+	position: absolute;
+	top: 10px;
+	left: 0px;
+	margin-left: 500px;
+	width: auto;
+	height: auto;
+	max-height: 1000px;
+	display: block;
+	padding: 8px;
+    background-color: white;
+	border-radius: 25px;
 }
 
-.custom-toolbar {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 200;
-	display: flex;
-	padding: 8px;
-	gap: 8px;
-    background-color: white;
+.custom-menu-row {
+
 }
 
 .custom-button {

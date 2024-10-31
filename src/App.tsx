@@ -6,6 +6,10 @@ import { Navbar } from './components/main/navbar';
 import { Main } from './main';
 
 function App() {
+
+
+  //console.log(process.env.NODE_ENV)
+
   return (<>
      <Main></Main>
   </> 
